@@ -91,10 +91,6 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
-export default new VueRouter({
-
-})
-
 ```
 
 再到 `main.js` 文件中添加 `import router from './router'` 然後在該文件的實例中加上 `router`
