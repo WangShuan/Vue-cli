@@ -58,15 +58,15 @@
 
 在項目資料夾中開啟終端機 輸入指令 `npm i --save bootstrap sass-loader node-sass` 安裝 `bootstrap` 與 `sass`
 
-  * `sass-loader` 版本需為 `7.3.1` 否則報錯: 
-
-    `Module build failed: TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined`
+  * `sass-loader` 版本需為 `7.3.1` 否則報錯: `Module build failed: TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined`
 
 接下來我們通過在 `<style lang="scss">@import "~bootstrap/scss/bootstrap"</style>` 引入 `bootstrap` 到 `App.vue` 中
 
 以上是安裝 `bootstrap` 樣式套件 接下來安裝 `axios` AJAX 套件
 
 直接在終端機輸入 `npm i --save axios vue-axios`
+
+  * `vue-axios` 版本需為 `2.1.5` 否則報錯: `axios typeError: Cannot set property 'axios' of undefined`
 
 然後開啟 `src/main.js` 在裡面引入 `axios` 與 `vue-axios`
 
