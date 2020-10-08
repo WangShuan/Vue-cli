@@ -56,13 +56,15 @@
 
 ## 3. 使用套件
 
+### 3-1. `bootstrap.scss` 套件
+
 在項目資料夾中開啟終端機 輸入指令 `npm i --save bootstrap sass-loader node-sass` 安裝 `bootstrap` 與 `sass`
 
   * `sass-loader` 版本需為 `7.3.1` 否則報錯: `Module build failed: TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined`
 
 接下來我們通過在 `<style lang="scss">@import "~bootstrap/scss/bootstrap"</style>` 引入 `bootstrap` 到 `App.vue` 中
 
-以上是安裝 `bootstrap` 樣式套件 接下來安裝 `axios` AJAX 套件
+### 3-2. `vue-axios` (AJAX 套件)
 
 直接在終端機輸入 `npm i --save axios vue-axios`
 
@@ -71,3 +73,50 @@
 然後開啟 `src/main.js` 在裡面引入 `axios` 與 `vue-axios`
 
 再加上 `Vue.use(axios,vueAxios)` 這行代碼 這樣我們就能在實例或元件中通過 `this` 來使用 `axios`
+
+在元件或實例中通過 `this.$http.get('api網址').then((這裡寫箭頭函數))` 就可以通過 AJAX 獲取資料
+
+### 3-3. `vue-router`(路由套件)
+
+直接在終端機輸入 `npm i --save vue-router`
+
+然後到 `src` 目錄中創建資料夾 `router` 在該資料夾中創建 `index.js` 文件
+
+打開 `index.js` 文件 輸入以下代碼：
+
+```js
+
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+
+Vue.use(VueRouter)
+
+export default new VueRouter({
+
+})
+
+```
+
+再到 `main.js` 文件中添加 `import router from './router'` 然後在該文件的實例中加上 `router`
+
+最後重啟 `vue-cli` 環境 會發現網址後方多了 `/#/` 即完成路由安裝
+
+路由使用方式為 在 `export default new VueRouter({})` 的物件中添加 `routes` 其值為數組 裡面放入物件 代碼如下：
+
+```js
+
+export default new VueRouter({
+    routes: [
+        {
+            name: '首頁', // 元件呈現的名稱
+            path: '/home', // 虛擬路由 即在網址 # 後面的路徑
+            component: Home // 元件 這裡通過 import 加載 helloworld.vue 為 Home
+        }
+    ]
+})
+
+```
+
+接下來回到 `App.vue` 中將 `<HelloWorld/>` 改成 `<router-view></router-view>`
+
+重整環境後在網址 `#` 後方加上 `home` 就可以打開該路由了

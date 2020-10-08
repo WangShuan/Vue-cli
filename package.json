@@ -15,7 +15,8 @@
     "node-sass": "^4.14.1",
     "sass-loader": "^7.3.1",
     "vue": "^2.5.2",
-    "vue-axios": "^2.1.5"
+    "vue-axios": "^2.1.5",
+    "vue-router": "^3.4.6"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
