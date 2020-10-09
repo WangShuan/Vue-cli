@@ -78,41 +78,242 @@
 
 ### 3-3. `vue-router`(路由套件)
 
-直接在終端機輸入 `npm i --save vue-router`
+* 安裝：
 
-然後到 `src` 目錄中創建資料夾 `router` 在該資料夾中創建 `index.js` 文件
+  直接在終端機輸入 `npm i --save vue-router`
 
-打開 `index.js` 文件 輸入以下代碼：
+  然後到 `src` 目錄中創建資料夾 `router` 在該資料夾中創建 `index.js` 文件
 
-```js
+  打開 `index.js` 文件 輸入以下代碼：
 
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+  ```js
 
-Vue.use(VueRouter)
+  import Vue from 'vue'
+  import VueRouter from 'vue-router'
 
-```
+  Vue.use(VueRouter)
 
-再到 `main.js` 文件中添加 `import router from './router'` 然後在該文件的實例中加上 `router`
+  ```
 
-最後重啟 `vue-cli` 環境 會發現網址後方多了 `/#/` 即完成路由安裝
+  再到 `main.js` 文件中添加 `import router from './router'` 然後在該文件的實例中加上 `router`
 
-路由使用方式為 在 `export default new VueRouter({})` 的物件中添加 `routes` 其值為數組 裡面放入物件 代碼如下：
+  最後重啟 `vue-cli` 環境 會發現網址後方多了 `/#/` 即完成路由安裝
 
-```js
+* 基礎使用：
 
-export default new VueRouter({
+  路由使用方式為 在 `export default new VueRouter({})` 的物件中添加 `routes` 其值為數組 裡面放入物件 代碼如下：
+
+  ```js
+
+  export default new VueRouter({
+      routes: [
+          {
+              name: '首頁', // 元件呈現的名稱
+              path: '/home', // 虛擬路由 即在網址 # 後面的路徑
+              component: Home // 元件 這裡通過 import 加載 helloworld.vue 為 Home
+          }
+      ]
+  })
+
+  ```
+
+  接下來回到 `App.vue` 添加新的標籤 `<router-view></router-view>`
+
+  重整環境後在網址 `#` 後方加上 `home` 就可以打開該路由畫面了
+
+* 進階使用：
+
+  我們先在 `index.html` 插入 `bootstrap` 樣式連結
+
+  然後在 `components` 目錄下增加一個目錄 `pages` 在該目錄下創建一個新的元件 `page.vue` 打開該編輯畫面 我們複製一個 `bootstrap` 元件中的卡片放在其 `template` 中
+
+  回到 `index.js` 中添加這個 `page.vue` 的路由 這裡將路由設為 `/page`
+
+  然後打開 `App.vue` 在 `template` 最上方添加一個 `bootstrap` 元件中的導覽列 把導覽列的 `a` 標籤改成 `router-link` 把 `href` 屬性改成 `to` 屬性 如下：
+
+  ```html
+  
+  <template>
+    <div id="app">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <router-link class="nav-link" to="/home">Home</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/page">Page</router-link>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <img src="./assets/logo.png" />
+      <router-view></router-view>
+    </div>
+  </template>
+  
+  ```
+
+  最後重新啟動環境 再將瀏覽器頁面重整 就能透過導覽列切換要顯示的分頁了
+
+* 巢狀路由：
+
+  我們先將 `page.vue` 複製三個 將它們各自改名為 `card1 card2 card3`
+
+  然後把 `page.vue` 的卡片元件內容刪除 只保留外層的 `<div class="card"></div>`
+
+  接下來在 `<div class="card"></div>` 裡面添加上 `router-view` 標籤 我們用路由來切換顯示內容
+
+  現在打開剛才複製的三個 `.vue` 檔 這裡相反 把外層的 `<div class="card"></div>` 刪除 只保留卡片元件內容 然後分別將其 `card-title` 改成 `card1 card2 card3`
+
+  最後我們打開 `index.js` 撰寫路由 這裡我們在 `page` 那個路由添加一個屬性 `children` 其值是陣列 陣列中一樣是一個物件 裡面是路由配置 `name path component` 這三個屬性 要注意的是 `children` 裡面的 `path` 不需在前面加 `/` 如下：
+
+  ```js
+
+  export default new VueRouter({
     routes: [
         {
-            name: '首頁', // 元件呈現的名稱
-            path: '/home', // 虛擬路由 即在網址 # 後面的路徑
-            component: Home // 元件 這裡通過 import 加載 helloworld.vue 為 Home
+            name: '首頁',
+            path: '/home',
+            component: Home
+        },
+        {
+            name: '分頁',
+            path: '/page',
+            component: Page,
+            children: [
+                {
+                    name: '卡片1',
+                    path: '',
+                    component: Card1
+                },
+                {
+                    name: '卡片2',
+                    path: 'card2',
+                    component: Card2
+                },
+                {
+                    name: '卡片3',
+                    path: 'card3',
+                    component: Card3
+                }
+            ]
         }
     ]
-})
+  })
+
+  ```
+
+* 動態路由：
+
+我們可以通過動態路由切換頁面中 `AJAX` 的結果 手些需在項目中安裝前面提過的 `vue-axios axios` 並配置於 `main.js` 中
+
+然後我們拿 `randomuser` 的 `API` 來做練習 
+
+首先打開 `index.js` 把 `card3 的 path` 改成 `card3/:id` 這裏 `:id` 為動態 `id`
+
+然後打開 `card3.vue` 在 `data` 下方新增一個 `created` 函數來獲取 `randomuser` 資料
+
+  * 這裡在 `randomuser` 官網中有提到我們可以通過在 `API` 網址後方加上 `/?seed=xxx` 來維持當前獲取的資料 我們利用這點可以通過將動態 `id` 增加到 `API` 網址後方來完成動態路由切換頁面中 `AJAX` 的結果
+
+  * 獲取動態 `id` 的方式為 `this.$route.params.id` 此為 `vue-router` 提供的方式 `$route.params` 為路徑參數 在路徑中使用 `:xxx` 就可以通過  `this.$route.params.xxx` 獲取 `:xxx` 中 `xxx` 的值
+
+    * 這裡要注意 ***`$route` 與 `$router` 是不一樣的東西*** 我們這裡操作的是 `$route` 這是路由信息對象 只供讀取 不能修改
+
+  代碼如下：
+
+  ```js
+  
+  export default {
+    data() {
+      return {};
+    },
+    created() {
+      var id = this.$route.params.id;
+      this.$http.get(`https://randomuser.me/api/?seed=${id}`).then((res) => {
+        console.log(res.data);
+      });
+    },
+  };
+  
+  ```
+
+* 命名路由：
+
+  當要在同一個畫面上載入多個元件時可以使用命名路由 
+
+  使用方式為在 `index.js` 文件中將要使用多個元件的路由對象的 `component` 改成 `components` 且 `components` 的值為一個對象 
+
+  `components` 對象中放入 `{ default: 原本的元件, 自定義名稱: 另外的元件}` 
+
+  然後在 `App.vue` 中增加新的 `router-view` 標籤並給該標籤添加 `name` 屬性 其屬性值為剛才 `components` 中的自定義名稱 即完成
+
+  這裡我們把 `page` 元件的導覽列提出來做成新的 `menu` 元件 通過命名路由來使兩個元件同時顯示在畫面上 代碼如下：
+
+  ```js
+
+  export default new VueRouter({
+    routes: [
+      {
+        path: '/page',
+        components: {
+          default: Page, // default 為沒有添加 name 屬性的 router-view 標籤
+          menu: Nav // menu 為添加 name 屬性為 menu 的 router-view 標籤
+        },
+        children: [
+          {
+            name: '卡片1',
+            path: '',
+            component: Card1
+          },
+          {
+            name: '卡片2',
+            path: 'card2',
+            component: Card2
+          },
+          {
+            name: '卡片3',
+            path: 'card3',
+            component: Card3
+          }
+        ]
+      }
+    ]
+  })
+
+  ```
+
+* 自定義切換路由：
+
+我們到 `menu.vue` 文件中添加兩個導航選項 這裏使用 `a` 標籤 而不是原本的 `router-link` 標籤
+
+然後給其添加點擊事件分別為 `updatePath 切換到指定頁面`、 `beforePath 回到上一個頁面`
+
+再到 `menu.vue` 的 `vue` 實例中添加 `methods` 撰寫點擊事件的函數
+
+這裏使用 `this.$router.xxx` 方法來切換路由 (詳細可參考 `vue-router` 的官方文檔)
+
+代碼如下：
+
+```js
+
+export default {
+  data() {
+    return {};
+  },
+  methods: {
+    updatePath() {
+      this.$router.push("/page/card2"); // 切換到 card2 頁面 並保存瀏覽紀錄
+      // this.$router.replace("/page/card2") // 這個方法一樣可以切換頁面 但不會保存紀錄 
+      // 若使用 $router.replace() 切換 則 $router.back() 會跳過上一次 切換到上上次頁面
+    },
+    beforePath() {
+      this.$router.back(); // 切換回上一個頁面 這個可以多次點擊 它會存取瀏覽器保留的紀錄
+      // this.$router.go(-1) // 這個方法也可以切換回上一個頁面 主要是看參數 
+      // $router.go() 參數1是下一個頁面 參數-1則是上一個頁面 通常與 $router.back() 一起使用
+    },
+  },
+};
 
 ```
-
-接下來回到 `App.vue` 中將 `<HelloWorld/>` 改成 `<router-view></router-view>`
-
-重整環境後在網址 `#` 後方加上 `home` 就可以打開該路由了
